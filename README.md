@@ -3,9 +3,9 @@
 Crowd capacity, overflow and sanitation at the Nashik–Trimbakeshwar Simhastha
 bathing sites, measured entirely from open data.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YOUR-GITHUB-USERNAME/nashik-kumbh-readiness/blob/main/notebooks/nashik_readiness.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/nnk-coder/nashik-kumbh-readiness/blob/main/notebooks/nashik_readiness.ipynb)
 
-**[→ Published site](https://YOUR-GITHUB-USERNAME.github.io/nashik-kumbh-readiness/)**
+**[→ Published site](https://nnk-coder.github.io/nashik-kumbh-readiness/)**
 
 ---
 
