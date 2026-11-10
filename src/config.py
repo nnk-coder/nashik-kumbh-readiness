@@ -237,13 +237,35 @@ OVERPASS_TIMEOUT_S = 180
 # --- Scoring ---------------------------------------------------------------
 
 # Weights sum to 100. Higher means more to resolve before the Snan.
+# Rebalanced when single_point_failure was added: a site with no redundancy is
+# a different kind of problem from one that is merely tight, and the Prayagraj
+# 2025 crush turned on closures rather than on raw capacity.
 READINESS_WEIGHTS = {
-    "throughput_shortfall": 35.0,
-    "egress_time": 20.0,
+    "throughput_shortfall": 30.0,
+    "single_point_failure": 20.0,
+    "egress_time": 15.0,
     "chokepoint": 15.0,
-    "toilet_gap": 15.0,
-    "water_gap": 15.0,
+    "toilet_gap": 10.0,
+    "water_gap": 10.0,
 }
+
+# --- Single points of failure ---------------------------------------------
+
+# A route carrying more than this share of a site's exit capacity has no
+# meaningful alternative: closing it is not a degradation, it is an incident.
+SINGLE_ROUTE_SHARE_FLAG = 0.40
+
+# One holding area absorbing more than this share of the overflow means the
+# overflow plan is really a single-asset plan.
+SINGLE_SPACE_SHARE_FLAG = 0.40
+
+# Share of a site's toilet or water units sitting in one cluster.
+FACILITY_CONCENTRATION_FLAG = 0.50
+
+# Facilities within this distance of each other are treated as one cluster:
+# they usually share a tanker, a desludging route and a power supply, so they
+# tend to fail together.
+FACILITY_CLUSTER_DISTANCE_M = 120.0
 
 TRAFFIC_LIGHT_BANDS = ((0.0, 25.0, "green"), (25.0, 55.0, "amber"), (55.0, 100.1, "red"))
 

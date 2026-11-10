@@ -10,10 +10,10 @@
     <h1>Tapovan / Sadhugram</h1>
     <p class="sub">Nashik &middot;
       20.0000, 73.8000 &middot;
-      precinct measured within <span class='na'>not resolved</span></p>
+      precinct measured within 250 m</p>
     <div class="scorebox">
       <div>
-        <div class="score" style="color:#b3261e">65<span>/100</span></div>
+        <div class="score" style="color:#b3261e">70<span>/100</span></div>
         <div class="scorelabel">readiness risk</div>
       </div>
       <div class="light" style="background:#b3261e">resolve before the Snan — several checks failed</div>
@@ -75,13 +75,40 @@
       Clearing a full site takes <b>740 minutes</b>.</p>
     <table class="evidence">
       <thead><tr><th>Route</th><th>Width</th><th>People/min</th><th>Width from</th></tr></thead>
-      <tbody><tr><td>Temple Lane</td><td class='num'>3.5 m</td><td class='num'></td><td class='src'>tagged in OSM</td></tr>
-<tr><td>Back Alley</td><td class='num'>4.0 m</td><td class='num'></td><td class='src'>inferred from road class</td></tr>
-<tr><td>Main Road</td><td class='num'>10.0 m</td><td class='num'></td><td class='src'>inferred from road class</td></tr></tbody>
+      <tbody><tr><td>Temple Lane</td><td class='num'>3.5 m</td><td class='num'>186</td><td class='src'>tagged in OSM</td></tr>
+<tr><td>Back Alley</td><td class='num'>4.0 m</td><td class='num'>216</td><td class='src'>inferred from road class</td></tr>
+<tr><td>Main Road</td><td class='num'>10.0 m</td><td class='num'>576</td><td class='src'>inferred from road class</td></tr></tbody>
     </table>
     <p class="note">67% of these
       widths are inferred from road class rather than measured. That is the
       weakest input on this card and the first thing a site visit should replace.</p>
+  </section>
+
+  <section>
+    <h2>If one thing fails</h2>
+    <p class="lede"><b>This site has no redundancy where it matters.</b> Main Road carries 59% of exit capacity; closing it adds 1113 minutes to clearing the site; 100% of mapped toilet units sit in a single cluster.</p>
+    <h3>Closing one approach route</h3>
+    <table class="evidence">
+      <thead><tr><th>Route</th><th>Width</th><th>Share of exit capacity</th><th>Cost of closing it</th></tr></thead>
+      <tbody><tr><td>Main Road</td><td class='num'>10.0 m</td><td class='num'>59%</td><td class='num'>+1,113 min</td></tr>
+<tr><td>Back Alley</td><td class='num'>4.0 m</td><td class='num'>22%</td><td class='num'>+220 min</td></tr>
+<tr><td>Temple Lane</td><td class='num'>3.5 m</td><td class='num'>19%</td><td class='num'>+182 min</td></tr></tbody>
+    </table>
+    <h3>Losing one holding area</h3>
+    <table class="evidence">
+      <thead><tr><th>Holding area</th><th>Distance</th><th>Share of overflow</th><th>Extra stranded</th></tr></thead>
+      <tbody><tr><td colspan='4' class='na'>No holding area carries the overflow.</td></tr></tbody>
+    </table>
+    <h3>Losing one facility cluster</h3>
+    <ul class="queues">
+      <li>Toilets: <b>6 units in 1 cluster</b>, the largest holding 100% of them. The queue already never clears, so a closure only deepens it.</li>
+      <li>Water points: <b>3 units in 1 cluster</b>, the largest holding 100% of them. The queue already never clears, so a closure only deepens it.</li>
+    </ul>
+    <p class="note">Facilities within 120 m of each other are
+      treated as one cluster: blocks that close together usually share a water
+      tanker, a desludging route and a power feed, so they tend to fail
+      together. A sanitation outage becomes a crowd problem when its demand
+      walks off to find the next block.</p>
   </section>
 
   <section>
@@ -108,12 +135,13 @@
 
   <section>
     <h2>The rubric</h2>
-    <ul class="flags"><li class='clear'><span class='mark'>clear</span><span class='flabel'>Can the site process the hour&#x27;s arrivals?</span><span class='weight'>35 pts</span><span class='rule'>Raised when peak-hour arrivals exceed what the open ground can turn over in an hour.</span></li>
-<li class='fired'><span class='mark'>FLAG</span><span class='flabel'>Can it be cleared quickly in an emergency?</span><span class='weight'>20 pts</span><span class='rule'>Raised when clearing a full site through its approach routes would take more than 60 minutes.</span></li>
+    <ul class="flags"><li class='clear'><span class='mark'>clear</span><span class='flabel'>Can the site process the hour&#x27;s arrivals?</span><span class='weight'>30 pts</span><span class='rule'>Raised when peak-hour arrivals exceed what the open ground can turn over in an hour.</span></li>
+<li class='fired'><span class='mark'>FLAG</span><span class='flabel'>Can it be cleared quickly in an emergency?</span><span class='weight'>15 pts</span><span class='rule'>Raised when clearing a full site through its approach routes would take more than 60 minutes.</span></li>
+<li class='fired'><span class='mark'>FLAG</span><span class='flabel'>Would one closure break the plan?</span><span class='weight'>20 pts</span><span class='rule'>Raised when one route carries more than 40% of exit capacity, one holding area absorbs more than 40% of the overflow, or losing the largest facility cluster tips its queue into one that never clears. At Prayagraj in 2025 the crush was worsened by exits and pontoon bridges being closed while people were already moving.</span></li>
 <li class='fired'><span class='mark'>FLAG</span><span class='flabel'>Is any approach route dangerously narrow?</span><span class='weight'>15 pts</span><span class='rule'>Raised when the narrowest link on an approach route is under 6 m wide. This is the mechanism that killed 39 people at Ramkund in 2003.</span></li>
-<li class='fired'><span class='mark'>FLAG</span><span class='flabel'>Are there enough toilets?</span><span class='weight'>15 pts</span><span class='rule'>Raised when more than 20% of the seats required by CPHEEO's community toilet norm are missing from the map.</span></li>
-<li class='fired'><span class='mark'>FLAG</span><span class='flabel'>Are there enough drinking water points?</span><span class='weight'>15 pts</span><span class='rule'>Raised when more than 20% of the taps required by CPHEEO (one per 50 people) are missing from the map.</span></li></ul>
-    <svg class='chart' viewBox='0 0 720 280' preserveAspectRatio='xMidYMid meet' role='img' aria-label='weights making up the risk score'><rect class='wbar' x='240' y='10' width='147.0' height='26' rx='5'/><text class='wlabel' x='230' y='28.0' text-anchor='end'>Throughput shortfall</text><text class='wval' x='397.0' y='28.0'>35</text><rect class='wbar on' x='240' y='66' width='84.0' height='26' rx='5'/><text class='wlabel' x='230' y='84.0' text-anchor='end'>Egress time</text><text class='wval' x='334.0' y='84.0'>20</text><rect class='wbar on' x='240' y='122' width='63.0' height='26' rx='5'/><text class='wlabel' x='230' y='140.0' text-anchor='end'>Chokepoint</text><text class='wval' x='313.0' y='140.0'>15</text><rect class='wbar on' x='240' y='178' width='63.0' height='26' rx='5'/><text class='wlabel' x='230' y='196.0' text-anchor='end'>Toilet gap</text><text class='wval' x='313.0' y='196.0'>15</text><rect class='wbar on' x='240' y='234' width='63.0' height='26' rx='5'/><text class='wlabel' x='230' y='252.0' text-anchor='end'>Water gap</text><text class='wval' x='313.0' y='252.0'>15</text></svg>
+<li class='fired'><span class='mark'>FLAG</span><span class='flabel'>Are there enough toilets?</span><span class='weight'>10 pts</span><span class='rule'>Raised when more than 20% of the seats required by CPHEEO's community toilet norm are missing from the map.</span></li>
+<li class='fired'><span class='mark'>FLAG</span><span class='flabel'>Are there enough drinking water points?</span><span class='weight'>10 pts</span><span class='rule'>Raised when more than 20% of the taps required by CPHEEO (one per 50 people) are missing from the map.</span></li></ul>
+    <svg class='chart' viewBox='0 0 720 336' preserveAspectRatio='xMidYMid meet' role='img' aria-label='weights making up the risk score'><rect class='wbar' x='240' y='10' width='126.0' height='26' rx='5'/><text class='wlabel' x='230' y='28.0' text-anchor='end'>Throughput shortfall</text><text class='wval' x='376.0' y='28.0'>30</text><rect class='wbar on' x='240' y='66' width='84.0' height='26' rx='5'/><text class='wlabel' x='230' y='84.0' text-anchor='end'>Single point failure</text><text class='wval' x='334.0' y='84.0'>20</text><rect class='wbar on' x='240' y='122' width='63.0' height='26' rx='5'/><text class='wlabel' x='230' y='140.0' text-anchor='end'>Egress time</text><text class='wval' x='313.0' y='140.0'>15</text><rect class='wbar on' x='240' y='178' width='63.0' height='26' rx='5'/><text class='wlabel' x='230' y='196.0' text-anchor='end'>Chokepoint</text><text class='wval' x='313.0' y='196.0'>15</text><rect class='wbar on' x='240' y='234' width='42.0' height='26' rx='5'/><text class='wlabel' x='230' y='252.0' text-anchor='end'>Toilet gap</text><text class='wval' x='292.0' y='252.0'>10</text><rect class='wbar on' x='240' y='290' width='42.0' height='26' rx='5'/><text class='wlabel' x='230' y='308.0' text-anchor='end'>Water gap</text><text class='wval' x='292.0' y='308.0'>10</text></svg>
     <p class="note">The score is the combined weight of the checks that failed.
       It ranks what to resolve first. It is not a prediction, not a safety
       certificate, and not a statement about any authority's preparations.</p>

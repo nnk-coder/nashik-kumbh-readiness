@@ -256,3 +256,63 @@ def count_within(points: Sequence[dict], lat0: float, lon0: float, radius_m: flo
     return sum(
         1 for p in points if haversine_m(p["lat"], p["lon"], lat0, lon0) <= radius_m
     )
+
+
+def cluster_points(
+    points: Sequence[dict],
+    lat0: float,
+    lon0: float,
+    link_distance_m: float = C.FACILITY_CLUSTER_DISTANCE_M,
+) -> list[dict]:
+    """Group facilities that sit close enough to fail together.
+
+    Single-link clustering: two facilities join the same cluster when they are
+    within `link_distance_m` of each other. Blocks that close together usually
+    share a water tanker, a desludging route and a power feed, so this is the
+    unit that goes out of service, not the individual cubicle.
+    """
+    pts = [
+        (to_xy(p["lat"], p["lon"], lat0, lon0), p)
+        for p in points
+        if p.get("lat") is not None and p.get("lon") is not None
+    ]
+    if not pts:
+        return []
+
+    parent = list(range(len(pts)))
+
+    def find(i):
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]
+            i = parent[i]
+        return i
+
+    def union(i, j):
+        ri, rj = find(i), find(j)
+        if ri != rj:
+            parent[rj] = ri
+
+    for i in range(len(pts)):
+        for j in range(i + 1, len(pts)):
+            (xi, yi), _ = pts[i]
+            (xj, yj), _ = pts[j]
+            if math.hypot(xi - xj, yi - yj) <= link_distance_m:
+                union(i, j)
+
+    groups: dict[int, list] = {}
+    for i, (xy, p) in enumerate(pts):
+        groups.setdefault(find(i), []).append((xy, p))
+
+    out = []
+    for members in groups.values():
+        xs = [m[0][0] for m in members]
+        ys = [m[0][1] for m in members]
+        cx, cy = sum(xs) / len(xs), sum(ys) / len(ys)
+        out.append(
+            {
+                "count": len(members),
+                "distance_m": round(math.hypot(cx, cy)),
+                "name": next((m[1].get("name") for m in members if m[1].get("name")), None),
+            }
+        )
+    return sorted(out, key=lambda c: -c["count"])

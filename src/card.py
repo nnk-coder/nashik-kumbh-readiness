@@ -6,7 +6,7 @@ import html
 import math
 from pathlib import Path
 
-from . import charts, config as C
+from . import capacity as CAP, charts, config as C
 
 LIGHT = {"green": "#1a7f44", "amber": "#b06b00", "red": "#b3261e"}
 TINT = {"green": "#e7f4ec", "amber": "#fdf1de", "red": "#fbeae8"}
@@ -20,6 +20,7 @@ NR = "<span class='na'>not resolved</span>"
 FLAG_LABELS = {
     "throughput_shortfall": "Can the site process the hour's arrivals?",
     "egress_time": "Can it be cleared quickly in an emergency?",
+    "single_point_failure": "Would one closure break the plan?",
     "chokepoint": "Is any approach route dangerously narrow?",
     "toilet_gap": "Are there enough toilets?",
     "water_gap": "Are there enough drinking water points?",
@@ -27,6 +28,7 @@ FLAG_LABELS = {
 FLAG_RULES = {
     "throughput_shortfall": "Raised when peak-hour arrivals exceed what the open ground can turn over in an hour.",
     "egress_time": f"Raised when clearing a full site through its approach routes would take more than {C.EGRESS_TIME_FLAG_MIN:.0f} minutes.",
+    "single_point_failure": f"Raised when one route carries more than {C.SINGLE_ROUTE_SHARE_FLAG:.0%} of exit capacity, one holding area absorbs more than {C.SINGLE_SPACE_SHARE_FLAG:.0%} of the overflow, or losing the largest facility cluster tips its queue into one that never clears. At Prayagraj in 2025 the crush was worsened by exits and pontoon bridges being closed while people were already moving.",
     "chokepoint": f"Raised when the narrowest link on an approach route is under {C.CHOKEPOINT_MIN_WIDTH_M:.0f} m wide. This is the mechanism that killed 39 people at Ramkund in 2003.",
     "toilet_gap": f"Raised when more than {C.TOILET_GAP_FLAG:.0%} of the seats required by CPHEEO's community toilet norm are missing from the map.",
     "water_gap": f"Raised when more than {C.WATER_GAP_FLAG:.0%} of the taps required by CPHEEO (one per {C.WATER_TAP_PER:.0f} people) are missing from the map.",
@@ -91,7 +93,7 @@ def _link_rows(r: dict) -> str:
         out.append(
             f"<tr><td>{html.escape(str(l['name']))}</td>"
             f"<td class='num'>{l['width_m']:.1f} m</td>"
-            f"<td class='num'>{l.get('flow_per_min') or ''}</td>"
+            f"<td class='num'>{CAP.flow_capacity_per_min(l['width_m']) or ''}</td>"
             f"<td class='src'>{'tagged in OSM' if tagged else 'inferred from road class'}</td></tr>"
         )
     return "\n".join(out) or "<tr><td colspan='4' class='na'>No approach routes resolved.</td></tr>"
@@ -111,6 +113,56 @@ def _queue_line(q: dict | None, label: str) -> str:
         f"<li>{html.escape(label)}: about <b>{q['wait_minutes']:.0f} minutes</b> "
         f"of queueing at {q['units']:,} units.</li>"
     )
+
+
+def _route_crit_rows(r: dict) -> str:
+    out = []
+    for c in (r.get("route_criticality") or [])[:6]:
+        if c.get("strands_site"):
+            cost = "<b>strands the site</b>"
+        elif c.get("egress_delta_min") is not None:
+            cost = f"+{c['egress_delta_min']:,.0f} min"
+        else:
+            cost = NR
+        out.append(
+            f"<tr><td>{html.escape(str(c['name']))}</td>"
+            f"<td class='num'>{c['width_m']:.1f} m</td>"
+            f"<td class='num'>{c['share_of_exit_capacity']:.0%}</td>"
+            f"<td class='num'>{cost}</td></tr>"
+        )
+    return "\n".join(out) or "<tr><td colspan='4' class='na'>No routes resolved.</td></tr>"
+
+
+def _space_crit_rows(r: dict) -> str:
+    out = []
+    for c in (r.get("space_criticality") or [])[:5]:
+        out.append(
+            f"<tr><td>{html.escape(str(c['name']))}</td>"
+            f"<td class='num'>{c['distance_m']:,} m</td>"
+            f"<td class='num'>{c['share_of_surplus']:.0%}</td>"
+            f"<td class='num'>{c['extra_stranded']:,}</td></tr>"
+        )
+    return "\n".join(out) or "<tr><td colspan='4' class='na'>No holding area carries the overflow.</td></tr>"
+
+
+def _cluster_line(crit: dict | None, label: str) -> str:
+    if not crit:
+        return f"<li>{html.escape(label)}: {NR}</li>"
+    conc = crit.get("concentration")
+    txt = (
+        f"<li>{html.escape(label)}: <b>{crit['units_total']:,} units in "
+        f"{crit['clusters']} cluster{'s' if crit['clusters'] != 1 else ''}</b>"
+    )
+    if conc is not None:
+        txt += f", the largest holding {conc:.0%} of them"
+    if crit.get("tips_into_failure"):
+        txt += (
+            ". <b>Losing that cluster tips the queue from "
+            f"{crit['wait_before_min']:.0f} minutes into one that never clears.</b>"
+        )
+    elif crit.get("stable_before") is False:
+        txt += ". The queue already never clears, so a closure only deepens it."
+    return txt + "</li>"
 
 
 def render_card(r: dict) -> str:
@@ -136,6 +188,22 @@ def render_card(r: dict) -> str:
     if r.get("errors"):
         items = "".join(f"<li>{html.escape(str(e))}</li>" for e in r["errors"])
         errors = f"<details class='errors'><summary>Query errors ({len(r['errors'])})</summary><ul>{items}</ul></details>"
+
+    sp = r.get("single_point") or {}
+    reasons = sp.get("reasons") or []
+    if not sp:
+        single_point_lead = NR
+    elif reasons:
+        single_point_lead = (
+            "<b>This site has no redundancy where it matters.</b> "
+            + "; ".join(html.escape(x) for x in reasons)
+            + "."
+        )
+    else:
+        single_point_lead = (
+            "No single closure breaks the plan on this evidence: exit capacity, "
+            "overflow space and facilities are each spread across more than one asset."
+        )
 
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
@@ -216,6 +284,31 @@ def render_card(r: dict) -> str:
     <p class="note">{_n((r.get('inferred_width_share') or 0) * 100, '%')} of these
       widths are inferred from road class rather than measured. That is the
       weakest input on this card and the first thing a site visit should replace.</p>
+  </section>
+
+  <section>
+    <h2>If one thing fails</h2>
+    <p class="lede">{single_point_lead}</p>
+    <h3>Closing one approach route</h3>
+    <table class="evidence">
+      <thead><tr><th>Route</th><th>Width</th><th>Share of exit capacity</th><th>Cost of closing it</th></tr></thead>
+      <tbody>{_route_crit_rows(r)}</tbody>
+    </table>
+    <h3>Losing one holding area</h3>
+    <table class="evidence">
+      <thead><tr><th>Holding area</th><th>Distance</th><th>Share of overflow</th><th>Extra stranded</th></tr></thead>
+      <tbody>{_space_crit_rows(r)}</tbody>
+    </table>
+    <h3>Losing one facility cluster</h3>
+    <ul class="queues">
+      {_cluster_line((r.get('single_point') or {}).get('toilets'), 'Toilets')}
+      {_cluster_line((r.get('single_point') or {}).get('water'), 'Water points')}
+    </ul>
+    <p class="note">Facilities within {C.FACILITY_CLUSTER_DISTANCE_M:.0f} m of each other are
+      treated as one cluster: blocks that close together usually share a water
+      tanker, a desludging route and a power feed, so they tend to fail
+      together. A sanitation outage becomes a crowd problem when its demand
+      walks off to find the next block.</p>
   </section>
 
   <section>

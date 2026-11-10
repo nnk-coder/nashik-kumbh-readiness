@@ -14,7 +14,7 @@ from typing import Any, Sequence
 
 from . import capacity as CAP
 from . import config as C
-from . import geo, sanitation as SAN
+from . import geo, resilience as RES, sanitation as SAN
 
 
 def _na(v) -> bool:
@@ -126,6 +126,7 @@ def assess_site(
         rec["toilets_required"] = req
         toilets = geo.amenity_points(elements, "toilets")
         rec["toilets_mapped"] = len(toilets)
+        rec["toilet_clusters"] = geo.cluster_points(toilets, lat, lon)
         rec["toilet_gap"] = SAN.gap(
             req["community_seats_total"] if req else None, len(toilets)
         )
@@ -149,6 +150,7 @@ def assess_site(
         rec["water_taps_required"] = taps_req
         taps = geo.amenity_points(elements, "drinking_water")
         rec["water_points_mapped"] = len(taps)
+        rec["water_clusters"] = geo.cluster_points(taps, lat, lon)
         rec["water_gap"] = SAN.gap(taps_req, len(taps))
         wusers = SAN.water_users_per_hour(present)
         rec["water_users_per_hour"] = wusers
@@ -163,6 +165,32 @@ def assess_site(
         rec["errors"].append(f"water: {exc}")
         rec["water_gap"] = None
 
+    # --- what one failure would do ---------------------------------------
+    try:
+        routes = RES.route_criticality(
+            rec.get("approach_links") or [], rec.get("holding_capacity")
+        )
+        spaces = RES.overflow_criticality(
+            (rec.get("breach") or {}).get("surplus"), rec.get("open_spaces") or []
+        )
+        t_crit = RES.facility_criticality(
+            [c["count"] for c in rec.get("toilet_clusters") or []],
+            rec.get("toilet_users_per_hour"),
+            C.TOILET_SERVICE_MINUTES,
+        )
+        w_crit = RES.facility_criticality(
+            [c["count"] for c in rec.get("water_clusters") or []],
+            rec.get("water_users_per_hour"),
+            C.WATER_SERVICE_MINUTES,
+            C.WATER_BLOCK_UNITS,
+        )
+        rec["route_criticality"] = routes[:6]
+        rec["space_criticality"] = spaces[:6]
+        rec["single_point"] = RES.single_point_summary(routes, spaces, t_crit, w_crit)
+    except Exception as exc:  # noqa: BLE001
+        rec["errors"].append(f"resilience: {exc}")
+        rec["single_point"] = None
+
     # --- rubric ------------------------------------------------------------
     flags = {
         "throughput_shortfall": bool(
@@ -171,6 +199,9 @@ def assess_site(
         "egress_time": bool(
             not _na(rec.get("egress_time_min"))
             and rec["egress_time_min"] > C.EGRESS_TIME_FLAG_MIN
+        ),
+        "single_point_failure": bool(
+            rec.get("single_point") and rec["single_point"]["flagged"]
         ),
         "chokepoint": bool(
             rec.get("narrowest")
@@ -197,6 +228,7 @@ def assess_site(
         (rec.get("narrowest") or {}).get("width_m"),
         rec.get("toilet_gap"),
         rec.get("water_gap"),
+        rec.get("single_point"),
     ]
     rec["evidence_completeness"] = round(
         sum(1 for v in resolved if v is not None) / len(resolved), 2
@@ -259,6 +291,8 @@ def save_results(records: list[dict], outputs_dir: str = "outputs") -> dict:
             "toilets_for_target_wait": r.get("toilets_for_target_wait"),
             "water_taps_required": r.get("water_taps_required"),
             "water_points_mapped": r.get("water_points_mapped"),
+            "worst_single_failure": "; ".join((r.get("single_point") or {}).get("reasons") or []) or None,
+            "top_route_share": ((r.get("route_criticality") or [{}])[0]).get("share_of_exit_capacity"),
             "score": r.get("score"), "traffic_light": r.get("traffic_light"),
             "evidence_completeness": r.get("evidence_completeness"),
             **{f"flag_{k}": v for k, v in (r.get("flags") or {}).items()},

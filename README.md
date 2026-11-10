@@ -36,14 +36,37 @@ risks that actually kill people, it does not transfer.
 
 | Check | Weight | Method |
 |---|---|---|
-| **Can the site process the hour's arrivals?** | 35 | Open ground × density × turnover against assumed peak-hour arrivals |
-| **Can it be cleared in an emergency?** | 20 | Population ÷ effective exit width × specific flow |
+| **Can the site process the hour's arrivals?** | 30 | Open ground × density × turnover against assumed peak-hour arrivals |
+| **Would one closure break the plan?** | 20 | Leave-one-out across routes, holding areas and facility clusters |
+| **Can it be cleared in an emergency?** | 15 | Population ÷ effective exit width × specific flow |
 | **Is any approach route dangerously narrow?** | 15 | Narrowest link on any route reaching the site |
-| **Are there enough toilets?** | 15 | CPHEEO community toilet norm vs. what OSM maps |
-| **Are there enough drinking water points?** | 15 | One tap per 50 people vs. what OSM maps |
+| **Are there enough toilets?** | 10 | CPHEEO community toilet norm vs. what OSM maps |
+| **Are there enough drinking water points?** | 10 | One tap per 50 people vs. what OSM maps |
 
 Flags are weighted into a 0–100 risk score. Higher means *resolve this first*,
 not *this will fail*.
+
+### Single points of failure
+
+A site can pass every capacity check and still be one blocked lane away from a
+disaster. At Prayagraj in 2025 the crush was made worse by exits and pontoon
+bridges being **closed while people were already moving** — the capacity
+existed on paper and was not available on the night.
+
+So each site is also tested by removing things one at a time:
+
+- **Close each approach route** and recompute egress. A route carrying more
+  than 40% of exit capacity has no real alternative; the card reports what
+  closing it costs in minutes, and whether it strands the site entirely.
+- **Lose each holding area** and recompute the residual. These Snans fall in
+  August and September, so a maidan that is waterlogged, fenced for works or
+  taken for parking is not a hypothetical.
+- **Lose the largest facility cluster** and recompute the queue. Facilities
+  within 120 m are treated as one cluster because they share a tanker, a
+  desludging route and a power feed, so they fail together. The card flags
+  when losing one tips a working queue into one that never clears — which is
+  how a sanitation outage becomes a crowd problem, with demand walking off
+  through a dense site to find the next block.
 
 ### The part most capacity studies skip
 
@@ -63,12 +86,13 @@ the site, because people queue at the block in front of them.
 src/config.py      every threshold, norm and assumption, with its source
 src/capacity.py    crowd maths — pure, no network
 src/sanitation.py  CPHEEO norms and queueing — pure, no network
-src/geo.py         OSM elements → areas, routes, open space (shapely)
+src/resilience.py  leave-one-out failure analysis — pure, no network
+src/geo.py         OSM elements → areas, routes, open space, clusters (shapely)
 src/osm.py         the only networked module: Overpass queries
 src/assess.py      orchestration; per-site failures are caught, not fatal
 src/card.py        one readiness card per site
 src/site.py        the published index
-tests/             75 tests, no network, no credentials
+tests/             102 tests, no network, no credentials
 ```
 
 Three deliberate choices:
@@ -93,7 +117,7 @@ five minutes.
 
 ```bash
 pip install -r requirements.txt
-python -m pytest -q          # 75 tests, no network needed
+python -m pytest -q          # 102 tests, no network needed
 python -c "
 from src import assess, card, site
 import datetime as dt
