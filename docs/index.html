@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Nashik Simhastha — Amrit Snan site readiness</title>
-<meta name="description" content="Crowd capacity, overflow and sanitation at the Nashik Simhastha bathing sites, from open data.">
+<meta name="description" content="Crowd capacity, overflow and sanitation at the Nashik Simhastha bathing sites, measured from open data.">
 <link rel="stylesheet" href="assets/style.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head><body>
@@ -12,41 +12,116 @@
   <p class="eyebrow">Open-data prototype &middot; 2026-11-10</p>
   <h1>Four bathing sites. One pre-dawn hour. How many people can actually stand there?</h1>
   <p class="lede">The Nashik&ndash;Trimbakeshwar Simhastha runs from 31 October 2026
-    to 24 July 2028, and the risk concentrates on four Amrit Snan mornings in
-    August and September 2027. The state expects around <b>12 crore</b>
-    visitors, roughly four times the 2015 event.</p>
-  <p class="lede">This measures the open ground at each bathing site from
-    OpenStreetMap, works out what it can process in the busiest hour, and says
-    where the people it cannot process are supposed to go. It then does the
-    same for toilets and drinking water against CPHEEO's norms.</p>
-  <p class="lede small">Two things make Nashik unlike Prayagraj, and both make
-    the Prayagraj playbook a poor template. Nashik's ghats sit inside a dense
-    historic city rather than on open sandbanks &mdash; in 2003, 39 people died
-    at Ramkund when about 30,000 were held on a narrow approach street. And the
-    Snans fall in the monsoon, not the dry season.</p>
+    to 24 July 2028. The risk concentrates on four Amrit Snan mornings in
+    August and September 2027, when the state expects around <b>12 crore</b>
+    visitors in total &mdash; roughly four times the 2015 event.</p>
+  <p class="lede">This measures the open ground at each bathing site, works out
+    what it can process in the busiest hour, says where the people it cannot
+    process are supposed to go, checks the toilets and drinking water against
+    national norms, and then asks what one closure would do to all of it.</p>
+  <p class="lede small">Everything here comes from public map data and
+    published standards. No account, no licence, no site visit.</p>
 </header>
 
 <section class="stats">
   <div class="stat"><b>4</b><span>sites assessed</span></div>
   <div class="stat"><b style="color:#b3261e">4</b><span>resolve first</span></div>
-  <div class="stat"><b style="color:#b06b00">0</b><span>resolve soon</span></div>
   <div class="stat"><b>1,185,728</b><span>with nowhere to go</span></div>
+  <div class="stat"><b>4</b><span>sites with no redundancy</span></div>
   <div class="stat"><b>60,206</b><span>toilet seats required</span></div>
   <div class="stat"><b>24</b><span>seats mapped</span></div>
 </section>
 
+
 <section>
-  <p class="eyebrow">How the number is built</p>
-  <h2>Twelve crore becomes thirty-six lakh in one hour</h2>
-  <div class="flowwrap"><svg class='flow' viewBox='0 0 1120 150' preserveAspectRatio='xMidYMid meet' role='img' aria-label='How 12 crore visitors becomes a peak-hour crowd'><g><rect x='0' y='30' width='240' height='86' rx='12' fill='#2B5CE6' opacity='0.10'/><text x='18' y='70' class='casc-big' fill='#2B5CE6'>12 crore</text><foreignObject x='16' y='78' width='208' height='34'><div xmlns='http://www.w3.org/1999/xhtml' class='casc-small'>expected over the whole Simhastha</div></foreignObject></g><path d='M248 73 L278 73' class='casc-arrow'/><path d='M272 67 L282 73 L272 79' class='casc-head'/><g><rect x='292' y='30' width='240' height='86' rx='12' fill='#2E6FD6' opacity='0.10'/><text x='310' y='70' class='casc-big' fill='#2E6FD6'>1.8 crore</text><foreignObject x='308' y='78' width='208' height='34'><div xmlns='http://www.w3.org/1999/xhtml' class='casc-small'>on the busiest Amrit Snan (15%)</div></foreignObject></g><path d='M540 73 L570 73' class='casc-arrow'/><path d='M564 67 L574 73 L564 79' class='casc-head'/><g><rect x='584' y='30' width='240' height='86' rx='12' fill='#C0478F' opacity='0.10'/><text x='602' y='70' class='casc-big' fill='#C0478F'>36 lakh</text><foreignObject x='600' y='78' width='208' height='34'><div xmlns='http://www.w3.org/1999/xhtml' class='casc-small'>in the pre-dawn hour (20%)</div></foreignObject></g><path d='M832 73 L862 73' class='casc-arrow'/><path d='M856 67 L866 73 L856 79' class='casc-head'/><g><rect x='876' y='30' width='240' height='86' rx='12' fill='#b3261e' opacity='0.10'/><text x='894' y='70' class='casc-big' fill='#b3261e'>at four sites</text><foreignObject x='892' y='78' width='208' height='34'><div xmlns='http://www.w3.org/1999/xhtml' class='casc-small'>split by assumed share of arrivals</div></foreignObject></g></svg></div>
-  <p class="note">Every multiplier is a stated assumption, set in one config
-    file and listed on each card. The peak-day share follows Prayagraj 2025,
-    where roughly a quarter of expected attendance came on Mauni Amavasya;
-    Nashik spreads across more Snan days, so 15% is used here.</p>
+  <p class="eyebrow">The problem</p>
+  <h2>This has already happened, twice, in living memory</h2>
+  <p class="lede">Crowd collapse at a Kumbh is not a freak event. It has a
+    mechanism, and the mechanism repeats: more people are fed towards a point
+    than the ground at that point can clear, and then something closes.</p>
+  <table class="evidence problems">
+    <thead><tr><th>Year</th><th>Where</th><th>What happened</th><th>The mechanism</th></tr></thead>
+    <tbody><tr><td class='yr'>2003</td><td><b>Nashik, Ramkund</b><div class='sub2'>39 dead, 57 injured</div></td><td>About 30,000 pilgrims were held by barricades on a narrow street leading to Ramkund. A scramble started and the crowd collapsed.</td><td class='src'>A route too narrow for the crowd fed into it.</td></tr>
+<tr><td class='yr'>2025</td><td><b>Prayagraj, Mauni Amavasya</b><div class='sub2'>37 official, BBC investigation found at least 82</div></td><td>A barrier broke during the Amrit Snan. People fleeing were caught at a closed exit; pontoon bridges they turned to had been shut.</td><td class='src'>Capacity that existed on paper was not available on the night.</td></tr>
+<tr><td class='yr'>2015</td><td><b>Nashik, previous Simhastha</b><div class='sub2'>2.5 crore attended</div></td><td>No mass-casualty incident, but the city handled roughly a quarter of the crowd now expected.</td><td class='src'>The precedent everyone plans from is four times too small.</td></tr></tbody>
+  </table>
+  <p class="note">Nashik now expects roughly <b>four times</b> the crowd it
+    handled in 2015, on ghats inside a dense historic city rather than on open
+    sandbanks, during the monsoon rather than the dry season.</p>
+</section>
+
+
+<section>
+  <p class="eyebrow">Predictability</p>
+  <h2>How much of it can you see coming?</h2>
+  <p class="lede">The honest answer is: most of the arithmetic, none of the
+    behaviour. <b>4 of 6</b> failure modes below are
+    visible from data that already exists, years before the event. The rest are
+    not, and no amount of mapping will make them so.</p>
+  <table class="evidence predict">
+    <thead><tr><th>Failure mode</th><th>Foreseeable?</th><th>How far ahead</th><th>Why</th></tr></thead>
+    <tbody><tr class='yes'><td>A route too narrow for the crowd sent down it</td><td><span class='tag tyes'>Yes</span></td><td class='num'>Years ahead</td><td class='src'>Street widths and the open ground at each ghat are in open map data today.</td></tr>
+<tr class='yes'><td>One closure removing most of the exit capacity</td><td><span class='tag tyes'>Yes</span></td><td class='num'>Years ahead</td><td class='src'>Leave-one-out on the route network. No new data needed.</td></tr>
+<tr class='yes'><td>Overflow with nowhere to go</td><td><span class='tag tyes'>Yes</span></td><td class='num'>Years ahead</td><td class='src'>Open space within walking distance is mapped; so is how much of the surplus it absorbs.</td></tr>
+<tr class='yes'><td>Toilet and water queues collapsing</td><td><span class='tag tyes'>Mostly</span></td><td class='num'>Months ahead</td><td class='src'>Requires the authority's own facility inventory to be exact; open data gives the order of magnitude.</td></tr>
+<tr class='no'><td>Where a crowd will actually choose to go</td><td><span class='tag tno'>No</span></td><td class='num'>&mdash;</td><td class='src'>Behavioural, and needs a dynamic simulation plus on-the-ground stewarding plans.</td></tr>
+<tr class='no'><td>A barrier failing, or a decision taken at 1am</td><td><span class='tag tno'>No</span></td><td class='num'>&mdash;</td><td class='src'>Operational. Mitigated by redundancy, which is exactly what the failure analysis measures.</td></tr></tbody>
+  </table>
+  <p class="note">That split is the argument for doing this early. The
+    foreseeable half is cheap to check and expensive to discover late &mdash;
+    widening an approach route is a civil works decision with a lead time of
+    years, not a decision anyone can take on the morning of a Snan.</p>
 </section>
 
 <section>
-  <h2>The sites</h2>
+  <p class="eyebrow">How it works</p>
+  <h2>From a map anyone can download to a number you can argue with</h2>
+  <div class="flowwrap"><svg class='flow' viewBox='0 0 1300 470' preserveAspectRatio='xMidYMid meet' role='img' aria-label='How the assessment works, in five stages'><path class='fedge' d='M390 240 C 415 240, 415 53, 440 53'/><path class='fedge' d='M695 53 C 745 53, 780 240, 830 240'/><path class='fedge' d='M390 240 C 415 240, 415 128, 440 128'/><path class='fedge' d='M695 128 C 745 128, 780 240, 830 240'/><path class='fedge' d='M390 240 C 415 240, 415 203, 440 203'/><path class='fedge' d='M695 203 C 745 203, 780 240, 830 240'/><path class='fedge' d='M390 240 C 415 240, 415 278, 440 278'/><path class='fedge' d='M695 278 C 745 278, 780 240, 830 240'/><path class='fedge' d='M390 240 C 415 240, 415 353, 440 353'/><path class='fedge' d='M695 353 C 745 353, 780 240, 830 240'/><path class='fedge strong' d='M185 240 L205 240'/><path class='fedge strong' d='M1015 240 L1050 240'/><g class='fpill'><rect x='440' y='25' width='255' height='56' rx='12'/><text class='fpill-name' x='454' y='48'>Buildings</text><text class='fpill-what' x='454' y='67'>what is already standing</text></g><g class='fpill'><rect x='440' y='100' width='255' height='56' rx='12'/><text class='fpill-name' x='454' y='123'>Streets</text><text class='fpill-what' x='454' y='142'>how wide the ways in are</text></g><g class='fpill'><rect x='440' y='175' width='255' height='56' rx='12'/><text class='fpill-name' x='454' y='198'>Open space</text><text class='fpill-what' x='454' y='217'>where a crowd could be held</text></g><g class='fpill'><rect x='440' y='250' width='255' height='56' rx='12'/><text class='fpill-name' x='454' y='273'>Toilets, water</text><text class='fpill-what' x='454' y='292'>what is on the ground</text></g><g class='fpill'><rect x='440' y='325' width='255' height='56' rx='12'/><text class='fpill-name' x='454' y='348'>CPHEEO norms</text><text class='fpill-what' x='454' y='367'>what the rules require</text></g><g class='fnode'><rect x='0' y='182' width='185' height='116' rx='14'/><text class='fnum' x='16' y='210'>1</text><text class='ftitle' x='16' y='234'>The crowd</text><foreignObject x='14' y='244' width='157' height='54'><div xmlns='http://www.w3.org/1999/xhtml' class='fbody'>12 crore over the event; four Amrit Snan mornings.</div></foreignObject></g><g class='fnode'><rect x='205' y='182' width='185' height='116' rx='14'/><text class='fnum' x='221' y='210'>2</text><text class='ftitle' x='221' y='234'>The place</text><foreignObject x='219' y='244' width='157' height='54'><div xmlns='http://www.w3.org/1999/xhtml' class='fbody'>Draw the precinct around each bathing site.</div></foreignObject></g><g class='fnode'><rect x='830' y='182' width='185' height='116' rx='14'/><text class='fnum' x='846' y='210'>4</text><text class='ftitle' x='846' y='234'>The test</text><foreignObject x='844' y='244' width='157' height='54'><div xmlns='http://www.w3.org/1999/xhtml' class='fbody'>Capacity, queues, and what one closure costs.</div></foreignObject></g><g class='fnode'><rect x='1050' y='182' width='240' height='116' rx='14'/><text class='fnum' x='1066' y='210'>5</text><text class='ftitle' x='1066' y='234'>The verdict</text><foreignObject x='1064' y='244' width='212' height='54'><div xmlns='http://www.w3.org/1999/xhtml' class='fbody'>A risk score, and what to fix first.</div></foreignObject></g><text class='fstage' x='567.5' y='14' text-anchor='middle'>3 &#183; The evidence &#8212; open data, no account needed</text><g class='ftag'><rect x='468' y='402' width='186' height='34' rx='17'/><text x='561' y='424' text-anchor='middle'>Data cost: &#8377;0</text></g></svg></div>
+  <h3>Step 1 in detail: where the crowd number comes from</h3>
+  <div class="flowwrap"><svg class='flow' viewBox='0 0 1120 150' preserveAspectRatio='xMidYMid meet' role='img' aria-label='How 12 crore visitors becomes a peak-hour crowd'><g><rect x='0' y='30' width='240' height='86' rx='12' fill='#2B5CE6' opacity='0.10'/><text x='18' y='70' class='casc-big' fill='#2B5CE6'>12 crore</text><foreignObject x='16' y='78' width='208' height='34'><div xmlns='http://www.w3.org/1999/xhtml' class='casc-small'>expected over the whole Simhastha</div></foreignObject></g><path d='M248 73 L278 73' class='casc-arrow'/><path d='M272 67 L282 73 L272 79' class='casc-head'/><g><rect x='292' y='30' width='240' height='86' rx='12' fill='#2E6FD6' opacity='0.10'/><text x='310' y='70' class='casc-big' fill='#2E6FD6'>1.8 crore</text><foreignObject x='308' y='78' width='208' height='34'><div xmlns='http://www.w3.org/1999/xhtml' class='casc-small'>on the busiest Amrit Snan (15%)</div></foreignObject></g><path d='M540 73 L570 73' class='casc-arrow'/><path d='M564 67 L574 73 L564 79' class='casc-head'/><g><rect x='584' y='30' width='240' height='86' rx='12' fill='#C0478F' opacity='0.10'/><text x='602' y='70' class='casc-big' fill='#C0478F'>36 lakh</text><foreignObject x='600' y='78' width='208' height='34'><div xmlns='http://www.w3.org/1999/xhtml' class='casc-small'>in the pre-dawn hour (20%)</div></foreignObject></g><path d='M832 73 L862 73' class='casc-arrow'/><path d='M856 67 L866 73 L856 79' class='casc-head'/><g><rect x='876' y='30' width='240' height='86' rx='12' fill='#b3261e' opacity='0.10'/><text x='894' y='70' class='casc-big' fill='#b3261e'>at four sites</text><foreignObject x='892' y='78' width='208' height='34'><div xmlns='http://www.w3.org/1999/xhtml' class='casc-small'>split by assumed share of arrivals</div></foreignObject></g></svg></div>
+  <p class="note">Every multiplier is a stated assumption living in one
+    configuration file. The peak-day share follows Prayagraj 2025, where about
+    a quarter of expected attendance came on a single morning; Nashik spreads
+    across more Snan days, so 15% is used here. Disagree with any of
+    them and the whole page recalculates.</p>
+</section>
+
+<section>
+  <h2>Demand against what the ground can take</h2>
+  <div class="chartbox"><svg class='chart' viewBox='0 0 760 330' preserveAspectRatio='xMidYMid meet' role='img' aria-label='peak-hour arrivals against what each site can process'><line class='grid' x1='16' y1='268' x2='744' y2='268'/><rect x='61.0' y='145.9' width='41.0' height='122.1' rx='3' fill='#b3261e'/><text class='tick' x='81.5' y='138.9' text-anchor='middle'>1,440,000</text><rect x='107.0' y='230.2' width='41.0' height='37.8' rx='3' fill='#2B5CE6'/><text class='tick' x='127.5' y='223.2' text-anchor='middle'>445,536</text><text class='cat' x='107.0' y='290' text-anchor='middle'>Ramkund</text><rect x='243.0' y='207.0' width='41.0' height='61.0' rx='3' fill='#b3261e'/><text class='tick' x='263.5' y='200.0' text-anchor='middle'>720,000</text><rect x='289.0' y='230.2' width='41.0' height='37.8' rx='3' fill='#2B5CE6'/><text class='tick' x='309.5' y='223.2' text-anchor='middle'>445,536</text><text class='cat' x='289.0' y='290' text-anchor='middle'>Kushavarta Kund</text><rect x='425.0' y='191.7' width='41.0' height='76.3' rx='3' fill='#b3261e'/><text class='tick' x='445.5' y='184.7' text-anchor='middle'>900,000</text><rect x='471.0' y='74.8' width='41.0' height='193.2' rx='3' fill='#2B5CE6'/><text class='tick' x='491.5' y='67.8' text-anchor='middle'>2,279,160</text><text class='cat' x='471.0' y='290' text-anchor='middle'>Tapovan / Sadhugram</text><rect x='607.0' y='222.2' width='41.0' height='45.8' rx='3' fill='#b3261e'/><text class='tick' x='627.5' y='215.2' text-anchor='middle'>540,000</text><rect x='653.0' y='74.8' width='41.0' height='193.2' rx='3' fill='#2B5CE6'/><text class='tick' x='673.5' y='67.8' text-anchor='middle'>2,279,160</text><text class='cat' x='653.0' y='290' text-anchor='middle'>Someshwar</text><rect x='16' y='308' width='13' height='13' rx='3' fill='#b3261e'/><text class='tick' x='35' y='319'>Arriving in the peak hour</text><rect x='223.0' y='308' width='13' height='13' rx='3' fill='#2B5CE6'/><text class='tick' x='242.0' y='319'>The site can process</text></svg></div>
+  <p class="note">"Can process" is standing capacity multiplied by how many
+    times the space turns over in an hour at a 20-minute dwell.
+    Throughput, not instantaneous capacity, is what binds at a bathing ghat:
+    people arrive, bathe and leave.</p>
+</section>
+
+
+<section class="worked">
+  <p class="eyebrow">One site, start to finish</p>
+  <h2>Ramkund</h2>
+  <p class="lede">The same checks every site gets, shown in full.</p>
+  <div class="kpis">
+    <div class="kpi"><b>1,440,000</b><span>arrive in the busiest hour</span></div>
+    <div class="kpi"><b>445,536</b><span>the ground can process</span></div>
+    <div class="kpi"><b style="color:#b3261e">952,864</b><span>with nowhere to go</span></div>
+    <div class="kpi"><b>128 min</b><span>they must be held upstream</span></div>
+  </div>
+  <p>The open ground is <b>37,128 m²</b> once buildings and
+    water are removed. At a managed standing density that holds
+    <b>148,512</b> people, turning over every
+    20 minutes. Demand runs
+    <b>3.23×</b> that. The narrowest way in is
+    <b>Temple Lane</b> at
+    <b>3.5 m</b>.</p>
+  <div class="callout" style="border-color:#b3261e">
+    <h3>And if one thing fails</h3>
+    <ul><li>Main Road carries 59% of exit capacity; closing it adds 218 minutes to clearing the site</li><li>100% of mapped toilet units sit in a single cluster</li></ul>
+  </div>
+  <p><a class="btn" href="cards/ramkund.html">See the full card &rarr;</a></p>
+</section>
+
+<section>
+  <h2>All four sites</h2>
   <div id="map" style="height:420px;border-radius:12px;overflow:hidden"></div>
   <table class="portfolio" id="pf">
     <thead><tr>
@@ -58,10 +133,21 @@
 <tr><td><a href='cards/tapovan.html'>Tapovan / Sadhugram</a><div class='sub2'>Nashik</div></td><td data-v='900000.0' class='num'>900,000</td><td data-v='2279160.0' class='num'>2,279,160</td><td data-v='0.39' class='num'>0.39&times;</td><td data-v='0.0' class='num'>0</td><td data-v='3.5' class='num'>3.5 m</td><td data-v='70.0'><span class='pill' style='background:#b3261e'>70</span></td></tr>
 <tr><td><a href='cards/someshwar.html'>Someshwar</a><div class='sub2'>Nashik</div></td><td data-v='540000.0' class='num'>540,000</td><td data-v='2279160.0' class='num'>2,279,160</td><td data-v='0.24' class='num'>0.24&times;</td><td data-v='0.0' class='num'>0</td><td data-v='3.5' class='num'>3.5 m</td><td data-v='70.0'><span class='pill' style='background:#b3261e'>70</span></td></tr></tbody>
   </table>
-  <p class="note">Click a column heading to sort. "Can process" is standing
-    capacity multiplied by how many times the space turns over in an hour at a
-    20-minute dwell &mdash; throughput, not instantaneous capacity,
-    is what binds at a bathing ghat.</p>
+  <p class="note">Click a column heading to sort.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Single points of failure</p>
+  <h2>How much rides on one route</h2>
+  <p class="lede">At Prayagraj in 2025 the crush was made worse by exits and
+    pontoon bridges being <b>closed while people were already moving</b>. The
+    capacity existed on paper and was not available on the night. So each site
+    is also tested by removing one thing at a time.</p>
+  <div class="chartbox"><svg class='chart' viewBox='0 0 740 196' preserveAspectRatio='xMidYMid meet' role='img' aria-label='share by item'><text class='wlabel' x='218' y='25.0' text-anchor='end'>Ramkund — Main Road</text><rect x='230' y='9' width='420' height='22' rx='5' fill='var(--line)'/><rect x='230' y='9' width='247.4' height='22' rx='5' fill='#b3261e'/><text class='wval' x='660' y='25.0'>59%</text><text class='wlabel' x='218' y='74.0' text-anchor='end'>Kushavarta Kund — Main Road</text><rect x='230' y='58' width='420' height='22' rx='5' fill='var(--line)'/><rect x='230' y='58' width='247.4' height='22' rx='5' fill='#b3261e'/><text class='wval' x='660' y='74.0'>59%</text><text class='wlabel' x='218' y='123.0' text-anchor='end'>Tapovan / Sadhugram — Main Road</text><rect x='230' y='107' width='420' height='22' rx='5' fill='var(--line)'/><rect x='230' y='107' width='247.4' height='22' rx='5' fill='#b3261e'/><text class='wval' x='660' y='123.0'>59%</text><text class='wlabel' x='218' y='172.0' text-anchor='end'>Someshwar — Main Road</text><rect x='230' y='156' width='420' height='22' rx='5' fill='var(--line)'/><rect x='230' y='156' width='247.4' height='22' rx='5' fill='#b3261e'/><text class='wval' x='660' y='172.0'>59%</text></svg></div>
+  <p class="note">Share of a site's total exit capacity carried by its single
+    busiest route. Above 40% there is no meaningful
+    alternative: closing it is not a degradation, it is an incident. The same
+    test runs over holding grounds and over toilet and water clusters.</p>
 </section>
 
 <section>
@@ -73,8 +159,43 @@
     <span class="pill" style="background:#b3261e">55&ndash;100</span> several checks failed
   </div>
   <p class="note">Mean evidence resolved across sites: <b>100%</b>.
-    A check that could not be resolved is reported as unresolved and scored as
-    clear, so every score here is a lower bound.</p>
+    An unresolved check is reported as unresolved and scored as clear, so every
+    score here is a lower bound.</p>
+</section>
+
+
+<section class="versus">
+  <p class="eyebrow">What it is worth</p>
+  <h2>The cheapest thing you can do before anyone travels</h2>
+  <div class="vgrid">
+    <div class="vcol old">
+      <h3>A site assessment the usual way</h3>
+      <p class="vbig">Weeks</p>
+      <ul>
+        <li>Engineers and stewards walk each site</li>
+        <li>One site at a time, in sequence</li>
+        <li>Cost scales with every site added</li>
+        <li>Describes the site as it is today</li>
+      </ul>
+    </div>
+    <div class="vcol new">
+      <h3>This, first</h3>
+      <p class="vbig">Minutes</p>
+      <ul>
+        <li>Runs from a desk, before anyone travels</li>
+        <li>Every site at once, re-runnable whenever plans change</li>
+        <li>Data costs nothing; the tenth site is free</li>
+        <li>Tests the plan against arithmetic, not impressions</li>
+      </ul>
+    </div>
+  </div>
+  <p class="note"><b>It does not replace a site visit.</b> It decides which
+    sites are worth one, what to measure when you get there, and which
+    questions to put to the people who already know the ground. On this run it
+    puts a number on something no walk-round would surface:
+    <b>1,185,728 people</b> with nowhere to go in a single hour, and the
+    specific routes, holding grounds and facility clusters whose loss would
+    make that worse.</p>
 </section>
 
 <section class="limits">
@@ -82,8 +203,8 @@
   <h2>Six things this gets wrong &mdash; and why they are published</h2>
   <ol class="limitlist">
     <li><b>OpenStreetMap is not an asset register.</b> A toilet that exists but
-      was never mapped counts as missing. The sanitation gaps are an upper
-      bound until the Authority supplies its own inventory.</li>
+      was never mapped counts as missing, so the sanitation gaps are an upper
+      bound until the authority supplies its own inventory.</li>
     <li><b>Most road widths are inferred, not measured.</b> Indian streets
       rarely carry a width tag, so widths come from road class. Each card says
       what share was inferred; this is the first thing a site visit replaces.</li>
@@ -91,16 +212,16 @@
       and water. Barriers, akhara enclosures, vehicle routes and stalls all
       take more away.</li>
     <li><b>The arrival assumptions are assumptions.</b> Peak-day and peak-hour
-      shares are reasoned from Prayagraj 2025, not observed at Nashik. The
-      site weights are a planning split, not a forecast.</li>
+      shares are reasoned from Prayagraj 2025, not observed at Nashik, and the
+      site weights are a planning split rather than a forecast.</li>
     <li><b>Queueing assumes people spread evenly between blocks.</b> They do
       not, so real waits are worse than the figures here.</li>
     <li><b>Nothing here models behaviour.</b> Crowd collapse is a dynamic
-      process; this is a static capacity check. It finds sites that cannot
-      work arithmetically. A site that passes still needs a simulation.</li>
+      process; this is a static capacity check. It finds sites that cannot work
+      arithmetically. A site that passes still needs a simulation.</li>
   </ol>
   <p class="note">And the standing rule: <b>this is a screening tool, not a
-    safety case.</b> It is not a prediction of harm and not a statement about
+    safety case.</b> It is not a prediction of harm, and not a statement about
     any authority's preparations.</p>
 </section>
 
@@ -108,8 +229,9 @@
   <p><b>Sources</b> &middot; Geometry and facilities: OpenStreetMap contributors
      (ODbL) &middot; Toilet and water norms: CPHEEO, Advisory on Public and
      Community Toilets &middot; Crowd density bands after Fruin; critical
-     density after G. Keith Still &middot; Event dates and attendance: Maharashtra
-     government announcements.</p>
+     density after G. Keith Still &middot; Event dates and attendance:
+     Maharashtra government announcements &middot; 2003 and 2025 incident
+     details from published reports.</p>
   <p>A personal methodology prototype, published as independent work. Not
      affiliated with, endorsed by, or produced for any authority. Code MIT licensed.</p>
 </footer>

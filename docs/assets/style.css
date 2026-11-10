@@ -297,3 +297,19 @@ ul.queues li { padding: 10px 14px; background: var(--panel); border-radius: 9px;
   }
   .kpis { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
 }
+
+/* --- narrative additions --- */
+.chart .cat { font: 600 13px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; fill: var(--ink); }
+table.problems td.yr { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.predict .tag { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
+table.predict .tyes { background: #e7f4ec; color: #1a7f44; }
+table.predict .tno { background: #f1f2f4; color: #5c646f; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) table.predict .tyes { background: #15321f; color: #5fc088; }
+  :root:not([data-theme="light"]) table.predict .tno { background: #23262c; color: #98a0ab; }
+}
+.callout { border-left: 5px solid; background: var(--panel); border-radius: 0 12px 12px 0; padding: 18px 22px; margin: 20px 0; }
+.callout h3 { margin-top: 0; }
+.callout ul { margin: 0; padding-left: 20px; color: var(--muted); }
+.callout li { margin-bottom: 6px; }
+.worked .kpis { margin-bottom: 18px; }

@@ -189,3 +189,100 @@ def completeness_ring(fraction: float, size: int = 92) -> str:
         f"<text x='{cx}' y='{cy + 6}' text-anchor='middle' "
         f"class='ring-text'>{frac:.0%}</text></svg>"
     )
+
+
+def grouped_bars(
+    labels: Sequence[str],
+    series: Sequence[dict],
+    *,
+    width: int = 760,
+    height: int = 330,
+    value_fmt: str = "{:,.0f}",
+    aria: str = "comparison by category",
+) -> str:
+    """Two or three measures side by side for each category.
+
+    `series` entries: {"name", "values", "colour"}.
+    """
+    if not labels or not series:
+        return "<p class='na'>Nothing to plot.</p>"
+    pad_l, pad_r, pad_t, pad_b = 16, 16, 40, 62
+    plot_w = width - pad_l - pad_r
+    plot_h = height - pad_t - pad_b
+
+    all_vals = [float(v) for s in series for v in s["values"] if not _na(v)]
+    hi = max(all_vals) if all_vals else 1.0
+    hi = hi * 1.18 or 1.0
+
+    n_cat = len(labels)
+    group_w = plot_w / n_cat
+    bar_w = min(46.0, (group_w * 0.68) / len(series))
+    parts = [
+        f"<svg class='chart' viewBox='0 0 {width} {height}' "
+        f"preserveAspectRatio='xMidYMid meet' role='img' aria-label='{html.escape(aria)}'>"
+    ]
+    base = pad_t + plot_h
+    parts.append(
+        f"<line class='grid' x1='{pad_l}' y1='{base}' x2='{width - pad_r}' y2='{base}'/>"
+    )
+
+    for ci, label in enumerate(labels):
+        gx = pad_l + ci * group_w + group_w / 2
+        start = gx - (bar_w * len(series)) / 2
+        for si, s in enumerate(series):
+            v = s["values"][ci] if ci < len(s["values"]) else None
+            if _na(v):
+                continue
+            h = max(1.0, float(v) / hi * plot_h)
+            x = start + si * bar_w
+            parts.append(
+                f"<rect x='{x:.1f}' y='{base - h:.1f}' width='{bar_w - 5:.1f}' "
+                f"height='{h:.1f}' rx='3' fill='{s['colour']}'/>"
+            )
+            parts.append(
+                f"<text class='tick' x='{x + (bar_w - 5) / 2:.1f}' y='{base - h - 7:.1f}' "
+                f"text-anchor='middle'>{html.escape(value_fmt.format(float(v)))}</text>"
+            )
+        parts.append(
+            f"<text class='cat' x='{gx:.1f}' y='{base + 22}' "
+            f"text-anchor='middle'>{html.escape(str(label))}</text>"
+        )
+
+    lx = pad_l
+    for s in series:
+        parts.append(
+            f"<rect x='{lx}' y='{height - 22}' width='13' height='13' rx='3' fill='{s['colour']}'/>"
+            f"<text class='tick' x='{lx + 19}' y='{height - 11}'>{html.escape(s['name'])}</text>"
+        )
+        lx += 22 + len(s["name"]) * 7.4
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+def hbar(rows: Sequence[dict], *, width: int = 740, colour: str = "var(--series-1)") -> str:
+    """Horizontal bars: {"label", "value" (0-1), "display"}."""
+    rows = [r for r in rows if not _na(r.get("value"))]
+    if not rows:
+        return "<p class='na'>Nothing to plot.</p>"
+    row_h, gap, label_w = 40, 9, 230
+    height = len(rows) * (row_h + gap)
+    track = width - label_w - 90
+    out, y = [], 0
+    for r in rows:
+        v = max(0.0, min(1.0, float(r["value"])))
+        out.append(
+            f"<text class='wlabel' x='{label_w - 12}' y='{y + row_h / 2 + 5}' "
+            f"text-anchor='end'>{html.escape(str(r['label']))}</text>"
+            f"<rect x='{label_w}' y='{y + 9}' width='{track}' height='{row_h - 18}' "
+            f"rx='5' fill='var(--line)'/>"
+            f"<rect x='{label_w}' y='{y + 9}' width='{track * v:.1f}' "
+            f"height='{row_h - 18}' rx='5' fill='{colour}'/>"
+            f"<text class='wval' x='{label_w + track + 10}' y='{y + row_h / 2 + 5}'>"
+            f"{html.escape(str(r.get('display') or f'{v:.0%}'))}</text>"
+        )
+        y += row_h + gap
+    return (
+        f"<svg class='chart' viewBox='0 0 {width} {height}' "
+        f"preserveAspectRatio='xMidYMid meet' role='img' "
+        f"aria-label='share by item'>{''.join(out)}</svg>"
+    )
