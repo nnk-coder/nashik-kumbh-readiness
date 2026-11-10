@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nashik Simhastha — Amrit Snan site readiness</title>
+<meta name="description" content="Crowd capacity, overflow and sanitation at the Nashik Simhastha bathing sites, from open data.">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head><body>
+<main class="site">
+
+<header class="hero">
+  <p class="eyebrow">Open-data prototype &middot; 2026-11-10</p>
+  <h1>Four bathing sites. One pre-dawn hour. How many people can actually stand there?</h1>
+  <p class="lede">The Nashik&ndash;Trimbakeshwar Simhastha runs from 31 October 2026
+    to 24 July 2028, and the risk concentrates on four Amrit Snan mornings in
+    August and September 2027. The state expects around <b>12 crore</b>
+    visitors, roughly four times the 2015 event.</p>
+  <p class="lede">This measures the open ground at each bathing site from
+    OpenStreetMap, works out what it can process in the busiest hour, and says
+    where the people it cannot process are supposed to go. It then does the
+    same for toilets and drinking water against CPHEEO's norms.</p>
+  <p class="lede small">Two things make Nashik unlike Prayagraj, and both make
+    the Prayagraj playbook a poor template. Nashik's ghats sit inside a dense
+    historic city rather than on open sandbanks &mdash; in 2003, 39 people died
+    at Ramkund when about 30,000 were held on a narrow approach street. And the
+    Snans fall in the monsoon, not the dry season.</p>
+</header>
+
+<section class="stats">
+  <div class="stat"><b>4</b><span>sites assessed</span></div>
+  <div class="stat"><b style="color:#b3261e">4</b><span>resolve first</span></div>
+  <div class="stat"><b style="color:#b06b00">0</b><span>resolve soon</span></div>
+  <div class="stat"><b>1,185,728</b><span>with nowhere to go</span></div>
+  <div class="stat"><b>60,206</b><span>toilet seats required</span></div>
+  <div class="stat"><b>24</b><span>seats mapped</span></div>
+</section>
+
+<section>
+  <p class="eyebrow">How the number is built</p>
+  <h2>Twelve crore becomes thirty-six lakh in one hour</h2>
+  <div class="flowwrap"><svg class='flow' viewBox='0 0 1120 150' preserveAspectRatio='xMidYMid meet' role='img' aria-label='How 12 crore visitors becomes a peak-hour crowd'><g><rect x='0' y='30' width='240' height='86' rx='12' fill='#2B5CE6' opacity='0.10'/><text x='18' y='70' class='casc-big' fill='#2B5CE6'>12 crore</text><foreignObject x='16' y='78' width='208' height='34'><div xmlns='http://www.w3.org/1999/xhtml' class='casc-small'>expected over the whole Simhastha</div></foreignObject></g><path d='M248 73 L278 73' class='casc-arrow'/><path d='M272 67 L282 73 L272 79' class='casc-head'/><g><rect x='292' y='30' width='240' height='86' rx='12' fill='#2E6FD6' opacity='0.10'/><text x='310' y='70' class='casc-big' fill='#2E6FD6'>1.8 crore</text><foreignObject x='308' y='78' width='208' height='34'><div xmlns='http://www.w3.org/1999/xhtml' class='casc-small'>on the busiest Amrit Snan (15%)</div></foreignObject></g><path d='M540 73 L570 73' class='casc-arrow'/><path d='M564 67 L574 73 L564 79' class='casc-head'/><g><rect x='584' y='30' width='240' height='86' rx='12' fill='#C0478F' opacity='0.10'/><text x='602' y='70' class='casc-big' fill='#C0478F'>36 lakh</text><foreignObject x='600' y='78' width='208' height='34'><div xmlns='http://www.w3.org/1999/xhtml' class='casc-small'>in the pre-dawn hour (20%)</div></foreignObject></g><path d='M832 73 L862 73' class='casc-arrow'/><path d='M856 67 L866 73 L856 79' class='casc-head'/><g><rect x='876' y='30' width='240' height='86' rx='12' fill='#b3261e' opacity='0.10'/><text x='894' y='70' class='casc-big' fill='#b3261e'>at four sites</text><foreignObject x='892' y='78' width='208' height='34'><div xmlns='http://www.w3.org/1999/xhtml' class='casc-small'>split by assumed share of arrivals</div></foreignObject></g></svg></div>
+  <p class="note">Every multiplier is a stated assumption, set in one config
+    file and listed on each card. The peak-day share follows Prayagraj 2025,
+    where roughly a quarter of expected attendance came on Mauni Amavasya;
+    Nashik spreads across more Snan days, so 15% is used here.</p>
+</section>
+
+<section>
+  <h2>The sites</h2>
+  <div id="map" style="height:420px;border-radius:12px;overflow:hidden"></div>
+  <table class="portfolio" id="pf">
+    <thead><tr>
+      <th>Site</th><th>Peak-hour arrivals</th><th>Can process</th>
+      <th>Ratio</th><th>Nowhere to go</th><th>Narrowest route</th><th>Risk</th>
+    </tr></thead>
+    <tbody><tr><td><a href='cards/ramkund.html'>Ramkund</a><div class='sub2'>Nashik</div></td><td data-v='1440000.0' class='num'>1,440,000</td><td data-v='445536.0' class='num'>445,536</td><td data-v='3.23' class='num'>3.23&times;</td><td data-v='952864.0' class='num'>952,864</td><td data-v='3.5' class='num'>3.5 m</td><td data-v='100.0'><span class='pill' style='background:#b3261e'>100</span></td></tr>
+<tr><td><a href='cards/kushavarta.html'>Kushavarta Kund</a><div class='sub2'>Trimbakeshwar</div></td><td data-v='720000.0' class='num'>720,000</td><td data-v='445536.0' class='num'>445,536</td><td data-v='1.62' class='num'>1.62&times;</td><td data-v='232864.0' class='num'>232,864</td><td data-v='3.5' class='num'>3.5 m</td><td data-v='100.0'><span class='pill' style='background:#b3261e'>100</span></td></tr>
+<tr><td><a href='cards/tapovan.html'>Tapovan / Sadhugram</a><div class='sub2'>Nashik</div></td><td data-v='900000.0' class='num'>900,000</td><td data-v='2279160.0' class='num'>2,279,160</td><td data-v='0.39' class='num'>0.39&times;</td><td data-v='0.0' class='num'>0</td><td data-v='3.5' class='num'>3.5 m</td><td data-v='65.0'><span class='pill' style='background:#b3261e'>65</span></td></tr>
+<tr><td><a href='cards/someshwar.html'>Someshwar</a><div class='sub2'>Nashik</div></td><td data-v='540000.0' class='num'>540,000</td><td data-v='2279160.0' class='num'>2,279,160</td><td data-v='0.24' class='num'>0.24&times;</td><td data-v='0.0' class='num'>0</td><td data-v='3.5' class='num'>3.5 m</td><td data-v='65.0'><span class='pill' style='background:#b3261e'>65</span></td></tr></tbody>
+  </table>
+  <p class="note">Click a column heading to sort. "Can process" is standing
+    capacity multiplied by how many times the space turns over in an hour at a
+    20-minute dwell &mdash; throughput, not instantaneous capacity,
+    is what binds at a bathing ghat.</p>
+</section>
+
+<section>
+  <h2>What the risk score is made of</h2>
+  <svg class='chart' viewBox='0 0 720 280' preserveAspectRatio='xMidYMid meet' role='img' aria-label='weights making up the risk score'><rect class='wbar' x='240' y='10' width='147.0' height='26' rx='5'/><text class='wlabel' x='230' y='28.0' text-anchor='end'>Throughput shortfall</text><text class='wval' x='397.0' y='28.0'>35</text><rect class='wbar' x='240' y='66' width='84.0' height='26' rx='5'/><text class='wlabel' x='230' y='84.0' text-anchor='end'>Egress time</text><text class='wval' x='334.0' y='84.0'>20</text><rect class='wbar' x='240' y='122' width='63.0' height='26' rx='5'/><text class='wlabel' x='230' y='140.0' text-anchor='end'>Chokepoint</text><text class='wval' x='313.0' y='140.0'>15</text><rect class='wbar' x='240' y='178' width='63.0' height='26' rx='5'/><text class='wlabel' x='230' y='196.0' text-anchor='end'>Toilet gap</text><text class='wval' x='313.0' y='196.0'>15</text><rect class='wbar' x='240' y='234' width='63.0' height='26' rx='5'/><text class='wlabel' x='230' y='252.0' text-anchor='end'>Water gap</text><text class='wval' x='313.0' y='252.0'>15</text></svg>
+  <div class="bands">
+    <span class="pill" style="background:#1a7f44">0&ndash;24</span> no change needed on this evidence
+    <span class="pill" style="background:#b06b00">25&ndash;54</span> resolve before the Snan
+    <span class="pill" style="background:#b3261e">55&ndash;100</span> several checks failed
+  </div>
+  <p class="note">Mean evidence resolved across sites: <b>100%</b>.
+    A check that could not be resolved is reported as unresolved and scored as
+    clear, so every score here is a lower bound.</p>
+</section>
+
+<section class="limits">
+  <p class="eyebrow">Read this part</p>
+  <h2>Six things this gets wrong &mdash; and why they are published</h2>
+  <ol class="limitlist">
+    <li><b>OpenStreetMap is not an asset register.</b> A toilet that exists but
+      was never mapped counts as missing. The sanitation gaps are an upper
+      bound until the Authority supplies its own inventory.</li>
+    <li><b>Most road widths are inferred, not measured.</b> Indian streets
+      rarely carry a width tag, so widths come from road class. Each card says
+      what share was inferred; this is the first thing a site visit replaces.</li>
+    <li><b>Open ground is an upper bound.</b> It is the precinct less buildings
+      and water. Barriers, akhara enclosures, vehicle routes and stalls all
+      take more away.</li>
+    <li><b>The arrival assumptions are assumptions.</b> Peak-day and peak-hour
+      shares are reasoned from Prayagraj 2025, not observed at Nashik. The
+      site weights are a planning split, not a forecast.</li>
+    <li><b>Queueing assumes people spread evenly between blocks.</b> They do
+      not, so real waits are worse than the figures here.</li>
+    <li><b>Nothing here models behaviour.</b> Crowd collapse is a dynamic
+      process; this is a static capacity check. It finds sites that cannot
+      work arithmetically. A site that passes still needs a simulation.</li>
+  </ol>
+  <p class="note">And the standing rule: <b>this is a screening tool, not a
+    safety case.</b> It is not a prediction of harm and not a statement about
+    any authority's preparations.</p>
+</section>
+
+<footer class="sitefoot">
+  <p><b>Sources</b> &middot; Geometry and facilities: OpenStreetMap contributors
+     (ODbL) &middot; Toilet and water norms: CPHEEO, Advisory on Public and
+     Community Toilets &middot; Crowd density bands after Fruin; critical
+     density after G. Keith Still &middot; Event dates and attendance: Maharashtra
+     government announcements.</p>
+  <p>A personal methodology prototype, published as independent work. Not
+     affiliated with, endorsed by, or produced for any authority. Code MIT licensed.</p>
+</footer>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const PTS = [{"name": "Ramkund", "lat": 20.0, "lon": 73.8, "score": 100.0, "light": "red", "ratio": 3.23, "slug": "ramkund"}, {"name": "Kushavarta Kund", "lat": 20.0, "lon": 73.8, "score": 100.0, "light": "red", "ratio": 1.62, "slug": "kushavarta"}, {"name": "Tapovan / Sadhugram", "lat": 20.0, "lon": 73.8, "score": 65.0, "light": "red", "ratio": 0.39, "slug": "tapovan"}, {"name": "Someshwar", "lat": 20.0, "lon": 73.8, "score": 65.0, "light": "red", "ratio": 0.24, "slug": "someshwar"}];
+const COL = {"green": "#1a7f44", "amber": "#b06b00", "red": "#b3261e"};
+const map = L.map('map').setView([19.97, 73.67], 11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+PTS.forEach(p => {
+  L.circleMarker([p.lat, p.lon], {
+    radius: Math.max(8, Math.min(26, 6 + p.ratio * 3)),
+    color: COL[p.light] || '#666', fillColor: COL[p.light] || '#666',
+    fillOpacity: 0.55, weight: 2
+  }).addTo(map).bindPopup(
+    `<b>${p.name}</b><br>${p.ratio}&times; over capacity in the peak hour` +
+    `<br><a href="cards/${p.slug}.html">readiness card</a>`
+  );
+});
+if (PTS.length) map.fitBounds(PTS.map(p => [p.lat, p.lon]), {padding: [60, 60]});
+
+document.querySelectorAll('#pf thead th').forEach((th, i) => {
+  th.style.cursor = 'pointer';
+  let asc = false;
+  th.addEventListener('click', () => {
+    asc = !asc;
+    const tb = document.querySelector('#pf tbody');
+    Array.from(tb.rows).sort((a, b) => {
+      const av = a.cells[i].dataset.v, bv = b.cells[i].dataset.v;
+      if (av !== undefined && bv !== undefined) return (asc ? 1 : -1) * (parseFloat(av) - parseFloat(bv));
+      return (asc ? 1 : -1) * a.cells[i].innerText.localeCompare(b.cells[i].innerText);
+    }).forEach(r => tb.appendChild(r));
+  });
+});
+
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+}), {threshold: 0.12});
+document.querySelectorAll('section, .flowwrap').forEach(el => {
+  el.classList.add('reveal'); io.observe(el);
+});
+</script>
+</body></html>
