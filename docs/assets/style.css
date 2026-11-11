@@ -273,3 +273,43 @@ ul.flags .rule { grid-column: 2 / -1; font-size: 0.87rem; color: var(--muted); }
   .evidence td.src, table.feeds td.src { display: none; }
   .scorebox { gap: 18px; }
 }
+
+/* --- Simhastha additions --- */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 18px 0 14px; }
+.kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+.kpi b { display: block; font-size: 1.5rem; line-height: 1.15; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 0.8rem; color: var(--muted); display: block; margin-top: 4px; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sub2 { font-size: 0.78rem; color: var(--faint); }
+.sitenote { font-size: 0.92rem; color: #4a5160; margin-top: 16px; max-width: 70ch; }
+ul.queues { list-style: none; padding: 0; margin: 6px 0 14px; }
+ul.queues li { padding: 10px 14px; background: var(--panel); border-radius: 9px; margin-bottom: 8px; font-size: 0.95rem; }
+.casc-big { font: 700 26px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+.casc-small { font: 400 12.5px/1.3 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--muted); }
+.casc-arrow { stroke: var(--line); stroke-width: 2; fill: none; }
+.casc-head { stroke: var(--faint); stroke-width: 2; fill: none; }
+
+@media (max-width: 760px) {
+  /* wide tables scroll inside themselves rather than widening the page */
+  table.portfolio, table.evidence {
+    display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+  .kpis { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+}
+
+/* --- narrative additions --- */
+.chart .cat { font: 600 13px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; fill: var(--ink); }
+table.problems td.yr { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.predict .tag { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
+table.predict .tyes { background: #e7f4ec; color: #1a7f44; }
+table.predict .tno { background: #f1f2f4; color: #5c646f; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) table.predict .tyes { background: #15321f; color: #5fc088; }
+  :root:not([data-theme="light"]) table.predict .tno { background: #23262c; color: #98a0ab; }
+}
+.callout { border-left: 5px solid; background: var(--panel); border-radius: 0 12px 12px 0; padding: 18px 22px; margin: 20px 0; }
+.callout h3 { margin-top: 0; }
+.callout ul { margin: 0; padding-left: 20px; color: var(--muted); }
+.callout li { margin-bottom: 6px; }
+.worked .kpis { margin-bottom: 18px; }
